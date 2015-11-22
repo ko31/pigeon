@@ -115,3 +115,19 @@ if(function_exists("register_field_group"))
         'menu_order' => 0,
     ));
 }
+
+/**
+ * メール送信
+ */
+if(function_exists("pigeon_send_mail"))
+{
+    function pigeon_send_mail( $id ) {
+//        $to = get_post_meta( $post->ID, 'to', true );
+//        $subject = $post->post_title;
+//        $message = get_post_meta( $post->ID, 'content', true );
+//        $headers = 'From: pigeon <pigeon@example.jp>' . "\r\n";
+//        $attachments = array( '/var/vhost/wp-demo.go-sign.info/html/pigeon/wp-content/themes/pigeon/screenshot.png' );
+//        wp_mail( $to, $subject, $message , $headers, $attachments );
+
+    }
+}

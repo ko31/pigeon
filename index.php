@@ -1,7 +1,8 @@
 <?php get_header(); ?>
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+    <div class="container">
+
+      <div>
 
 <?php
     $args = array(
@@ -13,20 +14,24 @@
     );
     $messages = get_posts( $args );
     foreach ( $messages as $message ):
-        echo '<a href="'.get_permalink( $message->ID ).'">'.$message->ID.'</a>';
-        echo "<br>\n";
-        echo $message->post_title;
-        echo "<br>\n";
-        echo get_post_meta( $message->ID, 'to', true );
-        echo "<br>\n";
-        echo get_post_meta( $message->ID, 'content', true );
-        echo "<br>\n";
-        echo get_post_meta( $message->ID, 'is_paint', true );
-        echo "<br>\n";
+//        echo '<a href="'.get_permalink( $message->ID ).'">'.$message->ID.'</a>';
+//        echo "<br>\n";
+//        echo $message->post_title;
+//        echo "<br>\n";
+//        echo get_post_meta( $message->ID, 'to', true );
+//        echo "<br>\n";
+//        echo get_post_meta( $message->ID, 'content', true );
+//        echo "<br>\n";
+//        echo get_post_meta( $message->ID, 'is_paint', true );
+//        echo "<br>\n";
+?>
+<a class="btn btn-success btn-lg btn-block" href="<?php echo get_permalink( $message->ID );?>" role="button"><?php echo $message->post_title;?></a>
+<?php
     endforeach;
 ?>
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
+      </div>
+
+    </div><!-- /.container -->
 
 <?php get_footer(); ?>

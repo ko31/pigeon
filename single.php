@@ -1,4 +1,8 @@
-<article>
+<?php get_header(); ?>
+
+    <div class="container">
+
+      <div>
 
 <p><?php the_title(); ?></p>
 
@@ -55,9 +59,13 @@ window.onload = function() {
 };
 </script>
 
-<div id="buttons">
-<input type="button" id="clear" value="クリア">
-<input type="button" id="save" value="保存">
-</div>
+<p>
+  <button type="button" id="clear" class="btn btn-default btn-lg">絵を消す</button>
+  <button type="button" id="save" class="btn btn-success btn-lg">絵をメールする</button>
+</p>
 
-</article>
+      </div>
+
+    </div><!-- /.container -->
+
+<?php get_footer(); ?>
