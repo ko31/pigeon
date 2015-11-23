@@ -25,7 +25,10 @@
 //        echo get_post_meta( $message->ID, 'is_paint', true );
 //        echo "<br>\n";
 ?>
-<a class="btn btn-success btn-lg btn-block" href="<?php echo get_permalink( $message->ID );?>" role="button"><?php echo $message->post_title;?></a>
+<a class="btn btn-primary btn-lg btn-block" href="<?php echo get_permalink( $message->ID );?>" role="button"><?php echo $message->post_title;?></a>
+
+<div class="alert alert-success" role="alert">メールを送信しました</div>
+
 <?php
     endforeach;
 ?>

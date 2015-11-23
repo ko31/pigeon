@@ -17,13 +17,8 @@
 
 <body>
 
-    <nav class="navbar default navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">
-            <img alt="pigeon" src="<?php echo get_template_directory_uri(); ?>/images/pigeon.png">
-          </a>
-        </div>
+    <header class="header">
+      <div class="container">
+    <h1><a href="<?php echo site_url();?>"><?php echo get_bloginfo('name');?></a> <small><?php echo get_bloginfo('description');?></small></h1>
       </div>
-    </nav>
-
+    </header>
