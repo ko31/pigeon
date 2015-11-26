@@ -117,6 +117,25 @@ if(function_exists("register_field_group"))
 }
 
 /**
+ * スタイルシート読み込み
+ */
+function pigeon_enqueue_styles() {
+    wp_enqueue_style ( 'pigeon-style', get_stylesheet_uri() );
+    wp_enqueue_style ( 'pigeon-bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css' );
+}
+add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_styles' );
+
+/**
+ * JavaScript読み込み
+ */
+function pigeon_enqueue_scripts() {
+    wp_enqueue_script ( 'html5shiv', get_template_directory_uri() . '/js/html5shiv.min.js' );
+    wp_script_add_data( 'html5shiv', 'conditional', 'lt IE 9' );
+    wp_enqueue_script ( 'respond', get_template_directory_uri() . '/js/respond.min.js' );
+}
+add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_scripts' );
+
+/**
  * メール送信
  */
 if(function_exists("pigeon_send_mail"))
