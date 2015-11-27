@@ -18,6 +18,9 @@ canvas { border: 1px solid #ccc }
   <button type="button" id="save" class="btn btn-primary btn-lg">絵をメールする</button>
 </p>
 
+<input type="hidden" id="post_id" name="post_id" value="<?php echo $post->ID;?>">
+<input type="hidden" id="base64" name="base64" value="">
+
       </div>
 
     </div><!-- /.container -->

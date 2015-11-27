@@ -1,4 +1,5 @@
-window.onload = function() {
+//window.onload = function() {
+jQuery(document).ready(function($) {
     var cv = document.getElementById('c');
     var ct = cv.getContext('2d');
     var isDrawing;
@@ -39,7 +40,23 @@ window.onload = function() {
         ct.clearRect(0, 0, cv.width, cv.height);
     };
     document.getElementById('save').onclick = function() {
-        //TODO:画像保存
-        console.debug(cv.toDataURL());
+        post_id = document.getElementById('post_id').value;
+        //TODO:jpegに変えたい
+//        base64 = cv.toDataURL('image/jpeg');
+        base64 = cv.toDataURL('image/png');
+        jQuery.ajax({
+            type: 'POST',
+            url: ajax_url,
+            data: {
+                'action' : 'pigeon_ajax_send_mail',
+                'post_id' : post_id,
+                'base64' : base64,
+            },
+            success: function( data, dataType ){
+                console.debug( data );
+            }
+        });
+        return false;
     };
-};
+//};
+});

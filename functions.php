@@ -117,6 +117,18 @@ if(function_exists("register_field_group"))
 }
 
 /**
+ * Ajax用グローバル変数設定
+ */
+function pigeon_set_ajax_url() {
+    $script = "";
+    $script .= "<script>";
+    $script .= "var ajax_url = '" . admin_url( 'admin-ajax.php') . "'";
+    $script .= "</script>";
+    echo $script;
+}
+add_action( 'wp_head', 'pigeon_set_ajax_url' );
+
+/**
  * スタイルシート読み込み
  */
 function pigeon_enqueue_styles() {
@@ -129,6 +141,7 @@ add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_styles' );
  * JavaScript読み込み
  */
 function pigeon_enqueue_scripts() {
+    wp_enqueue_script ( 'jquery' );
     wp_enqueue_script ( 'html5shiv', get_template_directory_uri() . '/js/html5shiv.min.js' );
     wp_script_add_data( 'html5shiv', 'conditional', 'lt IE 9' );
     wp_enqueue_script ( 'respond', get_template_directory_uri() . '/js/respond.min.js' );
@@ -138,15 +151,52 @@ add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_scripts' );
 /**
  * メール送信
  */
-if(function_exists("pigeon_send_mail"))
-{
-    function pigeon_send_mail( $id ) {
-//        $to = get_post_meta( $post->ID, 'to', true );
-//        $subject = $post->post_title;
-//        $message = get_post_meta( $post->ID, 'content', true );
-//        $headers = 'From: pigeon <pigeon@example.jp>' . "\r\n";
-//        $attachments = array( '/var/vhost/wp-demo.go-sign.info/html/pigeon/wp-content/themes/pigeon/screenshot.png' );
-//        wp_mail( $to, $subject, $message , $headers, $attachments );
+function pigeon_ajax_send_mail() {
 
+    $post_id = isset($_POST['post_id']) ? $_POST['post_id'] : '';
+    $base64 = isset($_POST['base64']) ? $_POST['base64'] : '';
+
+    // メール情報取得
+    if ( $post_id ) {
+        $to = get_post_meta( $post_id, 'to', true );
+        $content = get_post_meta( $post_id, 'content', true );
+        $_post = get_post( $post_id );
+        $subject = $_post->post_title;
+        if ( !( $to && $content && $subject ) ) {
+            return;
+        }
+    } else {
+        return;
     }
+
+    // 画像ファイル生成
+    $img = '';
+    if ( $base64 ) {
+        //TODO：画像ファイル名
+        $upload_dir = wp_upload_dir();
+        $img = $upload_dir['basedir'] . '/test.png';
+        $fp = fopen( $img, 'w' );
+        //TODO：jpegに変えたい
+//        $base64 = str_replace( 'data:image/jpeg;base64,', '', $base64 );
+        $base64 = str_replace( 'data:image/png;base64,', '', $base64 );
+        fwrite( $fp, base64_decode( $base64 ) );
+        fwrite( $fp, 'test' );
+        fclose( $fp );
+    }
+
+    // メール送信
+    $headers = 'From: pigeon <pigeon@example.jp>' . "\r\n";
+    if ( $img ) {
+        $attachments = array( $img );
+    } else {
+        $attachments = '';
+    }
+    $result = wp_mail( $to, $subject, $content, $headers, $attachments );
+
+    echo $result;
+
+    return;
 }
+add_action( 'wp_ajax_pigeon_ajax_send_mail', 'pigeon_ajax_send_mail' );
+add_action( 'wp_ajax_nopriv_pigeon_ajax_send_mail', 'pigeon_ajax_send_mail' );
+
