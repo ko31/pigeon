@@ -1,8 +1,10 @@
+<!--
     <footer class="footer">
       <div class="container">
         <p class="text-muted">Powered by WordPress & pigeon Theme by <a href="https://twitter.com/ko31">@ko31</a></p>
       </div>
     </footer>
+-->
 
 <?php wp_footer(); ?>
 
