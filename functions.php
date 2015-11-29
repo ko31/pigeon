@@ -172,10 +172,8 @@ function pigeon_ajax_send_mail() {
     // 画像ファイル生成
     $img = '';
     if ( $base64 ) {
-        //TODO：画像ファイル名
         $upload_dir = wp_upload_dir();
-//        $img = $upload_dir['basedir'] . '/test.png';
-        $img = $upload_dir['basedir'] . '/test.jpg';
+        $img = $upload_dir['basedir'] . '/pigeon_'.$post_id.'.jpg';
         $fp = fopen( $img, 'w' );
         $base64 = str_replace( 'data:image/jpeg;base64,', '', $base64 );
         fwrite( $fp, base64_decode( $base64 ) );
