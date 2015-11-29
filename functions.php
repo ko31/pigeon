@@ -174,13 +174,11 @@ function pigeon_ajax_send_mail() {
     if ( $base64 ) {
         //TODO：画像ファイル名
         $upload_dir = wp_upload_dir();
-        $img = $upload_dir['basedir'] . '/test.png';
+//        $img = $upload_dir['basedir'] . '/test.png';
+        $img = $upload_dir['basedir'] . '/test.jpg';
         $fp = fopen( $img, 'w' );
-        //TODO：jpegに変えたい
-//        $base64 = str_replace( 'data:image/jpeg;base64,', '', $base64 );
-        $base64 = str_replace( 'data:image/png;base64,', '', $base64 );
+        $base64 = str_replace( 'data:image/jpeg;base64,', '', $base64 );
         fwrite( $fp, base64_decode( $base64 ) );
-        fwrite( $fp, 'test' );
         fclose( $fp );
     }
 

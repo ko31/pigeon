@@ -3,6 +3,15 @@ jQuery(document).ready(function($) {
     var cv = document.getElementById('c');
     var ct = cv.getContext('2d');
     var isDrawing;
+
+    clearCanvas = function() {
+        ct.beginPath();
+        ct.clearRect(0, 0, cv.width, cv.height);
+        ct.fillStyle = '#ffffff';
+        ct.fillRect(0, 0, cv.width, cv.height);
+    };
+    clearCanvas();
+
     // for PC
     cv.onmousedown = function(e) {
         isDrawing = true;
@@ -36,14 +45,11 @@ jQuery(document).ready(function($) {
     };
     // Button
     document.getElementById('clear').onclick = function() {
-        ct.beginPath();
-        ct.clearRect(0, 0, cv.width, cv.height);
+        clearCanvas();
     };
     document.getElementById('save').onclick = function() {
         post_id = document.getElementById('post_id').value;
-        //TODO:jpegに変えたい
-//        base64 = cv.toDataURL('image/jpeg');
-        base64 = cv.toDataURL('image/png');
+        base64 = cv.toDataURL('image/jpeg');
         jQuery.ajax({
             type: 'POST',
             url: ajax_url,
