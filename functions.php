@@ -117,6 +117,32 @@ if(function_exists("register_field_group"))
 }
 
 /**
+ * テーマカスタマイザーにテーマ基本設定を追加
+ */
+function pigeon_customize_register( $wp_customize ) {
+    // セクション設定
+    $wp_customize->add_section(
+        'pigeon_setting_section',
+        array(
+            'title' => __( 'テーマ基本設定', 'pigeon' ),
+            'priority' => 130,
+        )
+    );
+    // コントロール設定
+    $wp_customize->add_setting( 'pigeon_email_from', array( 'default' => '', ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'pigeon_from_address',
+        array(
+            'label' => __( 'Fromメールアドレス', 'pigeon_email_from' ),
+            'section' => 'pigeon_setting_section',
+            'settings' => 'pigeon_email_from',
+        )
+    ));
+}
+add_action( 'customize_register', 'pigeon_customize_register' );
+
+/**
  * Ajax用グローバル変数設定
  */
 function pigeon_set_ajax_url() {
