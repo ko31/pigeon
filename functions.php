@@ -207,7 +207,11 @@ function pigeon_ajax_send_mail() {
     }
 
     // メール送信
-    $headers = 'From: pigeon <pigeon@example.jp>' . "\r\n";
+    $email_from = get_theme_mod( 'pigeon_email_from', '' );
+    if ( !$email_from ) {
+        $email_from = get_option( 'admin_email' );
+    }
+    $headers = 'From:' . $email_from . "\r\n";
     if ( $img ) {
         $attachments = array( $img );
     } else {
