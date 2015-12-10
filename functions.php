@@ -129,14 +129,39 @@ function pigeon_customize_register( $wp_customize ) {
         )
     );
     // コントロール設定
-    $wp_customize->add_setting( 'pigeon_email_from', array( 'default' => '', ) );
+    $wp_customize->add_setting( 'pigeon_setting_email_from', array( 'transport' => 'postMessage', ) );
     $wp_customize->add_control( new WP_Customize_Control(
         $wp_customize,
-        'pigeon_from_address',
+        'pigeon_email_from',
         array(
-            'label' => __( 'Fromメールアドレス', 'pigeon_email_from' ),
+            'label' => __( '送信元メールアドレス（From）', 'pigeon_email_from' ),
             'section' => 'pigeon_setting_section',
-            'settings' => 'pigeon_email_from',
+            'settings' => 'pigeon_setting_email_from',
+        )
+    ));
+    $wp_customize->add_setting( 'pigeon_setting_email_to', array( 'transport' => 'postMessage', ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'pigeon_email_to',
+        array(
+            'label' => __( '送信先メールアドレス（To）', 'pigeon_email_to' ),
+            'section' => 'pigeon_setting_section',
+            'settings' => 'pigeon_setting_email_to',
+        )
+    ));
+    $wp_customize->add_setting( 'pigeon_setting_is_paint', array( 'transport' => 'postMessage', ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'pigeon_is_paint',
+        array(
+            'label' => __( 'ペイント使用', 'pigeon_is_paint' ),
+            'section' => 'pigeon_setting_section',
+            'settings' => 'pigeon_setting_is_paint',
+            'type' => 'radio',
+            'choices' => array(
+                '1' => '使用する',
+                '0' => '使用しない',
+            ),
         )
     ));
 }
