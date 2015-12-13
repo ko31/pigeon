@@ -1,4 +1,3 @@
-//window.onload = function() {
 jQuery(document).ready(function($) {
     var cv = document.getElementById('c');
     var ct = cv.getContext('2d');
@@ -30,6 +29,7 @@ jQuery(document).ready(function($) {
     cv.onmouseup = function() {
         isDrawing = false;
     };
+
     // for SmartPhone
     cv.ontouchstart = function (e) {
         ct.lineWidth = 10;
@@ -43,12 +43,13 @@ jQuery(document).ready(function($) {
         ct.lineTo(e.touches[0].pageX-rect.left, e.touches[0].pageY-rect.top);
         ct.stroke();
     };
+
     // Button
-    document.getElementById('clear').onclick = function() {
+    $('#clear').on('click', function(){
         clearCanvas();
-    };
-    document.getElementById('save').onclick = function() {
-        post_id = document.getElementById('post_id').value;
+    });
+    $('#save').on('click', function(){
+        post_id = $('#post_id').val();
         base64 = cv.toDataURL('image/jpeg');
         jQuery.ajax({
             type: 'POST',
@@ -63,6 +64,5 @@ jQuery(document).ready(function($) {
             }
         });
         return false;
-    };
-//};
+    });
 });
