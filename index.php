@@ -5,6 +5,8 @@
       <div>
 
 <?php
+    $is_paint = get_theme_mod( 'pigeon_setting_is_paint', '' );
+
     $args = array(
         'posts_per_page'   => -1,
         'orderby'          => 'date',

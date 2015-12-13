@@ -7,15 +7,15 @@
  * @package pigeon
  */
 
-/**
- * Advanced Custom Fields プラグインのビジュアルインターフェースを取り除く
- */
-define( 'ACF_LITE', true );
-
-/**
- * Advanced Custom Fields プラグイン読み込み
- */
-include_once('advanced-custom-fields/acf.php');
+///**
+// * Advanced Custom Fields プラグインのビジュアルインターフェースを取り除く
+// */
+//define( 'ACF_LITE', true );
+//
+///**
+// * Advanced Custom Fields プラグイン読み込み
+// */
+//include_once('advanced-custom-fields/acf.php');
 
 /**
  * カスタム投稿
@@ -40,81 +40,82 @@ function pigeon_add_message_post_type(){
         'has_archive' => true,
         'supports' => array(
             'title',
+            'editor',
         )
     );
     register_post_type('messages', $params);
 }
 
-/**
- * カスタム投稿用のカスタムフィールド設定
- */
-if(function_exists("register_field_group"))
-{
-    register_field_group(array (
-        'id' => 'pigeon_messages',
-        'title' => 'メッセージ',
-        'fields' => array (
-            array (
-                'key' => 'messages_to',
-                'label' => 'メールアドレス',
-                'name' => 'to',
-                'type' => 'email',
-                'instructions' => '送信先のメールアドレスを指定してください。
-    （複数アドレスを指定する場合はカンマ区切りで入力してください。）',
-                'required' => 1,
-                'default_value' => '',
-                'placeholder' => '',
-                'prepend' => '',
-                'append' => '',
-            ),
-            array (
-                'key' => 'messages_content',
-                'label' => '本文',
-                'name' => 'content',
-                'type' => 'textarea',
-                'instructions' => '送信時のメール本文を指定してください。',
-                'default_value' => '',
-                'placeholder' => '',
-                'maxlength' => '',
-                'rows' => '',
-                'formatting' => 'br',
-            ),
-            array (
-                'key' => 'messages_is_paint',
-                'label' => 'ペイント使用',
-                'name' => 'is_paint',
-                'type' => 'radio',
-                'instructions' => 'ペイント機能の使用可否を選択してください。',
-                'choices' => array (
-                    1 => '使用する',
-                    0 => '使用しない',
-                ),
-                'other_choice' => 0,
-                'save_other_choice' => 0,
-                'default_value' => '',
-                'layout' => 'horizontal',
-            ),
-        ),
-        'location' => array (
-            array (
-                array (
-                    'param' => 'post_type',
-                    'operator' => '==',
-                    'value' => 'messages',
-                    'order_no' => 0,
-                    'group_no' => 0,
-                ),
-            ),
-        ),
-        'options' => array (
-            'position' => 'normal',
-            'layout' => 'no_box',
-            'hide_on_screen' => array (
-            ),
-        ),
-        'menu_order' => 0,
-    ));
-}
+///**
+// * カスタム投稿用のカスタムフィールド設定
+// */
+//if(function_exists("register_field_group"))
+//{
+//    register_field_group(array (
+//        'id' => 'pigeon_messages',
+//        'title' => 'メッセージ',
+//        'fields' => array (
+//            array (
+//                'key' => 'messages_to',
+//                'label' => 'メールアドレス',
+//                'name' => 'to',
+//                'type' => 'email',
+//                'instructions' => '送信先のメールアドレスを指定してください。
+//    （複数アドレスを指定する場合はカンマ区切りで入力してください。）',
+//                'required' => 1,
+//                'default_value' => '',
+//                'placeholder' => '',
+//                'prepend' => '',
+//                'append' => '',
+//            ),
+//            array (
+//                'key' => 'messages_content',
+//                'label' => '本文',
+//                'name' => 'content',
+//                'type' => 'textarea',
+//                'instructions' => '送信時のメール本文を指定してください。',
+//                'default_value' => '',
+//                'placeholder' => '',
+//                'maxlength' => '',
+//                'rows' => '',
+//                'formatting' => 'br',
+//            ),
+//            array (
+//                'key' => 'messages_is_paint',
+//                'label' => 'ペイント使用',
+//                'name' => 'is_paint',
+//                'type' => 'radio',
+//                'instructions' => 'ペイント機能の使用可否を選択してください。',
+//                'choices' => array (
+//                    1 => '使用する',
+//                    0 => '使用しない',
+//                ),
+//                'other_choice' => 0,
+//                'save_other_choice' => 0,
+//                'default_value' => '',
+//                'layout' => 'horizontal',
+//            ),
+//        ),
+//        'location' => array (
+//            array (
+//                array (
+//                    'param' => 'post_type',
+//                    'operator' => '==',
+//                    'value' => 'messages',
+//                    'order_no' => 0,
+//                    'group_no' => 0,
+//                ),
+//            ),
+//        ),
+//        'options' => array (
+//            'position' => 'normal',
+//            'layout' => 'no_box',
+//            'hide_on_screen' => array (
+//            ),
+//        ),
+//        'menu_order' => 0,
+//    ));
+//}
 
 /**
  * テーマカスタマイザーにテーマ基本設定を追加
@@ -222,12 +223,9 @@ function pigeon_ajax_send_mail() {
 
     // タイトル、本文
     if ( $post_id ) {
-        $content = get_post_meta( $post_id, 'content', true );
         $_post = get_post( $post_id );
         $subject = $_post->post_title;
-        if ( !( $to && $content && $subject ) ) {
-            return;
-        }
+        $content = $_post->post_content;
     } else {
         return;
     }
@@ -236,12 +234,12 @@ function pigeon_ajax_send_mail() {
     $attachments = '';
     if ( $base64 ) {
         $upload_dir = wp_upload_dir();
-        $image = $upload_dir['basedir'] . '/pigeon_'.$post_id.'.jpg';
-        $fp = fopen( $image, 'w' );
+        $_image = $upload_dir['basedir'] . '/pigeon_'.$post_id.'.jpg';
+        $fp = fopen( $_image, 'w' );
         $base64 = str_replace( 'data:image/jpeg;base64,', '', $base64 );
         fwrite( $fp, base64_decode( $base64 ) );
         fclose( $fp );
-        $attachments = array( $image );
+        $attachments = array( $_image );
     }
 
     $result = wp_mail( $to, $subject, $content, $headers, $attachments );
