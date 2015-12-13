@@ -207,9 +207,21 @@ function pigeon_ajax_send_mail() {
     $post_id = isset($_POST['post_id']) ? $_POST['post_id'] : '';
     $base64 = isset($_POST['base64']) ? $_POST['base64'] : '';
 
-    // メール情報取得
+    // From
+    $from = get_theme_mod( 'pigeon_setting_email_from', '' );
+    if ( !$from ) {
+        $from = get_option( 'admin_email' );
+    }
+    $headers = 'From:' . $from . "\r\n";
+
+    // To
+    $to = get_theme_mod( 'pigeon_setting_email_to', '' );
+    if ( !$to ) {
+        $to = get_option( 'admin_email' );
+    }
+
+    // タイトル、本文
     if ( $post_id ) {
-        $to = get_post_meta( $post_id, 'to', true );
         $content = get_post_meta( $post_id, 'content', true );
         $_post = get_post( $post_id );
         $subject = $_post->post_title;
@@ -220,28 +232,18 @@ function pigeon_ajax_send_mail() {
         return;
     }
 
-    // 画像ファイル生成
-    $img = '';
+    // 添付画像ファイル
+    $attachments = '';
     if ( $base64 ) {
         $upload_dir = wp_upload_dir();
-        $img = $upload_dir['basedir'] . '/pigeon_'.$post_id.'.jpg';
-        $fp = fopen( $img, 'w' );
+        $image = $upload_dir['basedir'] . '/pigeon_'.$post_id.'.jpg';
+        $fp = fopen( $image, 'w' );
         $base64 = str_replace( 'data:image/jpeg;base64,', '', $base64 );
         fwrite( $fp, base64_decode( $base64 ) );
         fclose( $fp );
+        $attachments = array( $image );
     }
 
-    // メール送信
-    $email_from = get_theme_mod( 'pigeon_email_from', '' );
-    if ( !$email_from ) {
-        $email_from = get_option( 'admin_email' );
-    }
-    $headers = 'From:' . $email_from . "\r\n";
-    if ( $img ) {
-        $attachments = array( $img );
-    } else {
-        $attachments = '';
-    }
     $result = wp_mail( $to, $subject, $content, $headers, $attachments );
 
     echo $result;
