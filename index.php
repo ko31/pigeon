@@ -1,9 +1,17 @@
 <?php get_header(); ?>
 
-    <div class="container">
+<div class="container">
 
-      <div>
+<?php
+    if ( isset($_GET['sent']) ) echo "GET=".$_GET['sent'];
+    if ( false ):
+?>
+        <div class="alert alert-success" role="alert">メールを送信しました</div>
+<?php
+    endif;
+?>
 
+    <div class="messages">
 <?php
     $is_paint = get_theme_mod( 'pigeon_setting_is_paint', '' );
 
@@ -30,16 +38,9 @@
         endif;
     endforeach;
 ?>
+    </div><!-- /.messages -->
 
-      </div>
-
-<!--
-<div id="success_<?php echo $post->ID;?>" class="alert alert-success" role="alert">メールを送信しました</div>
-
-<div id="warning_<?php echo $post->ID;?>" class="alert alert-warning" role="alert">メール送信に失敗しました</div>
--->
-
-    </div><!-- /.container -->
+</div><!-- /.container -->
 
 <?php
     if ( !$is_paint ):
