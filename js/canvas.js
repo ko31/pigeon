@@ -44,25 +44,15 @@ jQuery(document).ready(function($) {
         ct.stroke();
     };
 
-    // Button
-    $('#clear').on('click', function(){
+    // Clear button
+    $('#clear-btn').on('click', function(){
         clearCanvas();
     });
-    $('#save').on('click', function(){
-        post_id = $('#post_id').val();
+
+    // Send button
+    $('#send-btn').on('click', function(){
         base64 = cv.toDataURL('image/jpeg');
-        jQuery.ajax({
-            type: 'POST',
-            url: ajax_url,
-            data: {
-                'action' : 'pigeon_ajax_send_mail',
-                'post_id' : post_id,
-                'base64' : base64,
-            },
-            success: function( data, dataType ){
-                console.debug( data );
-            }
-        });
-        return false;
+        $('#base64').val(base64);
+        $('#messageform').submit();
     });
 });

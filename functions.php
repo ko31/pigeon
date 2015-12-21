@@ -88,18 +88,6 @@ function pigeon_customize_register( $wp_customize ) {
 add_action( 'customize_register', 'pigeon_customize_register' );
 
 /**
- * Ajax用グローバル変数設定
- */
-function pigeon_set_ajax_url() {
-    $script = "";
-    $script .= "<script>";
-    $script .= "var ajax_url = '" . admin_url( 'admin-ajax.php') . "'";
-    $script .= "</script>";
-    echo $script;
-}
-add_action( 'wp_head', 'pigeon_set_ajax_url' );
-
-/**
  * スタイルシート読み込み
  */
 function pigeon_enqueue_styles() {
@@ -122,10 +110,16 @@ add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_scripts' );
 /**
  * メール送信
  */
-function pigeon_ajax_send_mail() {
+function pigeon_send_mail( $post_id = '', $base64 = '' ) {
 
-    $post_id = isset($_POST['post_id']) ? $_POST['post_id'] : '';
-    $base64 = isset($_POST['base64']) ? $_POST['base64'] : '';
+    if ( !$post_id ) {
+        return false;
+    }
+
+    // タイトル、本文
+    $_post = get_post( $post_id );
+    $subject = $_post->post_title;
+    $content = $_post->post_content;
 
     // From
     $from = get_theme_mod( 'pigeon_setting_email_from', '' );
@@ -138,15 +132,6 @@ function pigeon_ajax_send_mail() {
     $to = get_theme_mod( 'pigeon_setting_email_to', '' );
     if ( !$to ) {
         $to = get_option( 'admin_email' );
-    }
-
-    // タイトル、本文
-    if ( $post_id ) {
-        $_post = get_post( $post_id );
-        $subject = $_post->post_title;
-        $content = $_post->post_content;
-    } else {
-        return;
     }
 
     // 添付画像ファイル
@@ -163,10 +148,5 @@ function pigeon_ajax_send_mail() {
 
     $result = wp_mail( $to, $subject, $content, $headers, $attachments );
 
-    echo $result;
-
-    return;
+    return true;
 }
-add_action( 'wp_ajax_pigeon_ajax_send_mail', 'pigeon_ajax_send_mail' );
-add_action( 'wp_ajax_nopriv_pigeon_ajax_send_mail', 'pigeon_ajax_send_mail' );
-
