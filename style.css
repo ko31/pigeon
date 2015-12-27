@@ -22,9 +22,18 @@ body {
     margin-bottom: 60px;
 }
 
+h1 {
+    margin-top: 10px;
+}
+
+h2 {
+    margin-top: 10px;
+    font-size: 24px;
+}
+
 .header {
-    padding-bottom: 9px;
-    margin: 0 0 20px;
+    padding-bottom: 5px;
+    margin: 0 0 10px;
     border-bottom: 1px solid #eee;
 }
 
@@ -39,8 +48,14 @@ body {
 
 .container {
     width: auto;
-    padding: 0 15px;
+    padding: 0 20px;
 }
 .container .text-muted {
     margin: 20px 0;
+}
+
+#canvas_area {
+    width: 90%;
+    height: 40%;
+    position: fixed;
 }

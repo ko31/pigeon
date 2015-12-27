@@ -1,7 +1,11 @@
 jQuery(document).ready(function($) {
-    var cv = document.getElementById('c');
+    var cv = document.getElementById('canvas');
     var ct = cv.getContext('2d');
     var isDrawing;
+
+    $("#canvas").attr('height', $("#canvas_area").height());
+    $("#canvas").attr('width', $("#canvas_area").width());
+    $("#canvas").css("border", "1px solid #eeeeee");
 
     clearCanvas = function() {
         ct.beginPath();

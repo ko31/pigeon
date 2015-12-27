@@ -91,8 +91,8 @@ add_action( 'customize_register', 'pigeon_customize_register' );
  * スタイルシート読み込み
  */
 function pigeon_enqueue_styles() {
-    wp_enqueue_style ( 'pigeon-style', get_stylesheet_uri() );
     wp_enqueue_style ( 'pigeon-bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css' );
+    wp_enqueue_style ( 'pigeon-style', get_stylesheet_uri() );
 }
 add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_styles' );
 
