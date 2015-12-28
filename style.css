@@ -54,6 +54,10 @@ h2 {
     margin: 20px 0;
 }
 
+.message_list {
+    margin: 10px 0;
+}
+
 #canvas_area {
     width: 90%;
     height: 40%;

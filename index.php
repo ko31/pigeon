@@ -24,7 +24,6 @@ endif;
 
 <?php
 $is_paint = get_theme_mod( 'pigeon_setting_is_paint', '' );
-
 $args = array(
     'posts_per_page'   => -1,
     'orderby'          => 'date',
@@ -33,21 +32,22 @@ $args = array(
     'post_status'      => 'publish',
 );
 $posts = get_posts( $args );
-
 foreach ( $posts as $post ):
+?>
+        <p class="message_list">
+<?php
     if ( $is_paint ):
 ?>
-        <p>
             <a class="btn btn-primary btn-lg btn-block" href="<?php echo get_permalink( $post->ID );?>" role="button"><?php echo $post->post_title;?></a>
-        </p>
 <?php
-        else:
+    else:
 ?>
-        <p>
             <button type="button" id="send_<?php echo $post->ID;?>" class="btn btn-primary btn-lg btn-block send-btn" data-id="<?php echo $post->ID;?>"><?php echo $post->post_title;?></button>
-        </p>
 <?php
     endif;
+?>
+        </p>
+<?php
 endforeach;
 ?>
     </form>
