@@ -1,8 +1,14 @@
 <?php get_header(); ?>
 
+<?php
+// ペイント使用有無チェック
+$is_paint = get_theme_mod( 'pigeon_setting_is_paint', '' );
+?>
+
 <div class="container">
 
 <?php
+// POST時はメール送信を行う
 if ( isset( $_POST['post_id'] ) ):
     $post_id = $_POST['post_id'];
     $base64 = isset( $_POST['base64'] ) ? $_POST['base64'] : '';
@@ -19,11 +25,8 @@ if ( isset( $_POST['post_id'] ) ):
 endif;
 ?>
 
-    <form method="post" id="messageform" class="form-horizontal" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-        <input type="hidden" id="post_id" name="post_id" value="" />
-
 <?php
-$is_paint = get_theme_mod( 'pigeon_setting_is_paint', '' );
+// カスタム投稿メッセージ取得
 $args = array(
     'posts_per_page'   => -1,
     'orderby'          => 'date',
@@ -32,25 +35,38 @@ $args = array(
     'post_status'      => 'publish',
 );
 $posts = get_posts( $args );
-foreach ( $posts as $post ):
+
+if ( $posts ):
+?>
+    <form method="post" id="messageform" class="form-horizontal" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+        <input type="hidden" id="post_id" name="post_id" value="" />
+<?php
+    foreach ( $posts as $post ):
 ?>
         <p class="message_list">
 <?php
-    if ( $is_paint ):
+        if ( $is_paint ):
 ?>
             <a class="btn btn-primary btn-lg btn-block" href="<?php echo get_permalink( $post->ID );?>" role="button"><?php echo $post->post_title;?></a>
 <?php
-    else:
+        else:
 ?>
             <button type="button" id="send_<?php echo $post->ID;?>" class="btn btn-primary btn-lg btn-block send-btn" data-id="<?php echo $post->ID;?>"><?php echo $post->post_title;?></button>
 <?php
-    endif;
+        endif;
 ?>
         </p>
 <?php
-endforeach;
+    endforeach;
 ?>
     </form>
+<?php
+else:
+?>
+        <p class="message_list">メッセージが登録されていません。</a>
+<?php
+endif;
+?>
 
 </div><!-- /.container -->
 
