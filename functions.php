@@ -126,7 +126,8 @@ function pigeon_send_mail( $post_id = '', $base64 = '' ) {
     if ( !$from ) {
         $from = get_option( 'admin_email' );
     }
-    $headers = 'From:' . $from . "\r\n";
+//    $headers = 'From:' . $from . "\r\n";
+    $headers = 'Reply-to:' . $from . "\r\n";
 
     // To
     $to = get_theme_mod( 'pigeon_setting_email_to', '' );
