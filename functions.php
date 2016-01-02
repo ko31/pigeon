@@ -26,6 +26,7 @@ function pigeon_add_message_post_type(){
             'not_found' => 'メッセージが見つかりませんでした。',
             'not_found_in_trash' => 'ゴミ箱内にメッセージが見つかりませんでした。',
         ),
+        'rewrite' => false,
         'public' => true,
         'has_archive' => true,
         'supports' => array(
