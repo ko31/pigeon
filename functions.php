@@ -63,7 +63,7 @@ function pigeon_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'pigeon_setting_email_reply', array( 'transport' => 'postMessage', ) );
     $wp_customize->add_control( new WP_Customize_Control(
         $wp_customize,
-        'pigeon_email_from',
+        'pigeon_email_reply',
         array(
             'label' => __( '返信先メールアドレス（Reply-To）', 'pigeon_email_reply' ),
             'section' => 'pigeon_setting_section',
