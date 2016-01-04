@@ -60,6 +60,16 @@ function pigeon_customize_register( $wp_customize ) {
             'settings' => 'pigeon_setting_email_from',
         )
     ));
+    $wp_customize->add_setting( 'pigeon_setting_email_reply', array( 'transport' => 'postMessage', ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'pigeon_email_from',
+        array(
+            'label' => __( '返信先メールアドレス（Reply-To）', 'pigeon_email_reply' ),
+            'section' => 'pigeon_setting_section',
+            'settings' => 'pigeon_setting_email_reply',
+        )
+    ));
     $wp_customize->add_setting( 'pigeon_setting_email_to', array( 'transport' => 'postMessage', ) );
     $wp_customize->add_control( new WP_Customize_Control(
         $wp_customize,
@@ -127,8 +137,14 @@ function pigeon_send_mail( $post_id = '', $base64 = '' ) {
     if ( !$from ) {
         $from = get_option( 'admin_email' );
     }
-//    $headers = 'From:' . $from . "\r\n";
-    $headers = 'Reply-to:' . $from . "\r\n";
+    $headers = 'From:' . $from . "\r\n";
+
+    // Reply-To
+    $reply = get_theme_mod( 'pigeon_setting_email_reply', '' );
+    if ( !$reply ) {
+        $reply = $from;
+    }
+    $headers = 'Reply-to:' . $reply . "\r\n";
 
     // To
     $to = get_theme_mod( 'pigeon_setting_email_to', '' );
