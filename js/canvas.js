@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
     // for PC
     cv.onmousedown = function(e) {
         isDrawing = true;
-        ct.lineWidth = 10;
+        ct.lineWidth = 3;
         ct.lineJoin = ct.lineCap = 'round';
         var rect = e.target.getBoundingClientRect();
         ct.moveTo(e.clientX-rect.left, e.clientY-rect.top);
@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 
     // for SmartPhone
     cv.ontouchstart = function (e) {
-        ct.lineWidth = 10;
+        ct.lineWidth = 3;
         ct.lineJoin = ct.lineCap = 'round';
         e.preventDefault();
         var rect = e.target.getBoundingClientRect();
