@@ -76,6 +76,7 @@ function pigeon_customize_register( $wp_customize ) {
         'pigeon_email_to',
         array(
             'label' => __( '送信先メールアドレス（To）', 'pigeon_email_to' ),
+            'description' => __( '※カンマ区切りで複数指定可', 'pigeon_email_to' ),
             'section' => 'pigeon_setting_section',
             'settings' => 'pigeon_setting_email_to',
         )
@@ -86,6 +87,7 @@ function pigeon_customize_register( $wp_customize ) {
         'pigeon_is_paint',
         array(
             'label' => __( 'ペイント使用', 'pigeon_is_paint' ),
+            'description' => __( 'お絵かき画像をメールに添付できるペイント機能を使用するかどうか選択してください', 'pigeon_is_paint' ),
             'section' => 'pigeon_setting_section',
             'settings' => 'pigeon_setting_is_paint',
             'type' => 'radio',
@@ -93,6 +95,17 @@ function pigeon_customize_register( $wp_customize ) {
                 '1' => '使用する',
                 '0' => '使用しない',
             ),
+        )
+    ));
+    $wp_customize->add_setting( 'pigeon_setting_user_agent', array( 'transport' => 'postMessage', ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'pigeon_user_agent',
+        array(
+            'label' => __( 'アクセス許可端末', 'pigeon_user_agent' ),
+            'description' => __( 'アクセス許可する端末のユーザーエージェント文字列の一部を入力してください（※カンマ区切りで複数指定可）', 'pigeon_user_agent' ),
+            'section' => 'pigeon_setting_section',
+            'settings' => 'pigeon_setting_user_agent',
         )
     ));
 }
@@ -117,6 +130,25 @@ function pigeon_enqueue_scripts() {
     wp_enqueue_script ( 'respond', get_template_directory_uri() . '/js/respond.min.js' );
 }
 add_action( 'wp_enqueue_scripts', 'pigeon_enqueue_scripts' );
+
+/**
+ * アクセス許可端末チェック
+ */
+function pigeon_is_allowed_user_agent() {
+    if ( !is_user_logged_in() ) {
+        $user_agent = get_theme_mod( 'pigeon_setting_user_agent', '' );
+        if ( $user_agent ) {
+            $user_agents = explode( ",", $user_agent );
+            $pattern = '/' . implode( '|', $user_agents ) . '/i';
+            if ( !preg_match( $pattern, $_SERVER['HTTP_USER_AGENT'] ) ){
+                header( "HTTP/1.0 403 Forbidden" ); 
+                echo "<h1>403 Forbidden</h1>";
+                exit;
+            }
+        }
+    }
+}
+add_action( 'wp_head', 'pigeon_is_allowed_user_agent' );
 
 /**
  * メール送信
