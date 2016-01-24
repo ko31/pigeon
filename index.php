@@ -9,7 +9,7 @@ $is_paint = get_theme_mod( 'pigeon_setting_is_paint', '' );
 
 <?php
 // POST時はメール送信を行う
-if ( isset( $_POST['post_id'] ) ):
+if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'pigeon_nonce' ) ):
     $post_id = $_POST['post_id'];
     $base64 = isset( $_POST['base64'] ) ? $_POST['base64'] : '';
     $result = pigeon_send_mail( $post_id, $base64 );
@@ -40,6 +40,7 @@ if ( $posts ):
 ?>
     <form method="post" id="messageform" class="form-horizontal" action="<?php echo esc_url( home_url( '/' ) ); ?>">
         <input type="hidden" id="post_id" name="post_id" value="" />
+        <?php wp_nonce_field( 'pigeon_nonce' );?>
 <?php
     foreach ( $posts as $post ):
 ?>

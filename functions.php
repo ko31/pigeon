@@ -159,8 +159,12 @@ function pigeon_send_mail( $post_id = '', $base64 = '' ) {
         return false;
     }
 
-    // タイトル、本文
     $_post = get_post( $post_id );
+    if ( !$_post ) {
+        return false;
+    }
+
+    // タイトル、本文
     $subject = $_post->post_title;
     $content = $_post->post_content;
 

@@ -7,6 +7,7 @@
     <form method="post" id="messageform" class="form-horizontal" action="<?php echo esc_url( home_url( '/' ) ); ?>">
         <input type="hidden" id="post_id" name="post_id" value="<?php echo $post->ID;?>">
         <input type="hidden" id="base64" name="base64" value="">
+        <?php wp_nonce_field( 'pigeon_nonce' );?>
 
         <div id="canvas_area">
             <canvas id="canvas"></canvas>
