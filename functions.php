@@ -168,19 +168,21 @@ function pigeon_send_mail( $post_id = '', $base64 = '' ) {
     $subject = $_post->post_title;
     $content = $_post->post_content;
 
+    $headers = array();
+
     // From
     $from = get_theme_mod( 'pigeon_setting_email_from', '' );
     if ( !$from ) {
         $from = get_option( 'admin_email' );
     }
-    $headers = 'From:' . $from . "\r\n";
+    $headers[] = 'From:' . $from;
 
     // Reply-To
     $reply = get_theme_mod( 'pigeon_setting_email_reply', '' );
     if ( !$reply ) {
         $reply = $from;
     }
-    $headers = 'Reply-to:' . $reply . "\r\n";
+    $headers[] = 'Reply-to:' . $reply;
 
     // To
     $to = get_theme_mod( 'pigeon_setting_email_to', '' );
