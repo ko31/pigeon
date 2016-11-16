@@ -81,6 +81,17 @@ function pigeon_customize_register( $wp_customize ) {
             'settings' => 'pigeon_setting_email_to',
         )
     ));
+    $wp_customize->add_setting( 'pigeon_setting_line_token', array( 'transport' => 'postMessage', ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'pigeon_line_token',
+        array(
+            'label' => __( 'LINE Notify アクセストークン', 'pigeon_line_token' ),
+            'description' => __( '<a href="https://notify-bot.line.me/ja/">LINE Notify</a> に通知したい場合、アクセストークンを入力してください', 'pigeonline_token' ),
+            'section' => 'pigeon_setting_section',
+            'settings' => 'pigeon_setting_line_token',
+        )
+    ));
     $wp_customize->add_setting( 'pigeon_setting_is_paint', array( 'transport' => 'postMessage', ) );
     $wp_customize->add_control( new WP_Customize_Control(
         $wp_customize,
@@ -200,7 +211,49 @@ function pigeon_send_mail( $post_id = '', $base64 = '' ) {
         $attachments = array( $_image );
     }
 
+    // メール送信
     $result = wp_mail( $to, $subject, $content, $headers, $attachments );
 
+    // LINE Notify 通知
+    $token = get_theme_mod( 'pigeon_setting_line_token', '' );
+    if ( $token ) {
+        if ( $base64 ) {
+            $_image = $upload_dir['basedir'] . '/pigeon_'.$post_id.'.jpg';
+            $image_notify = $upload_dir['basedir'] . '/pigeon_' . date( 'YmdHis' ) . '.jpg';
+            copy( $_image, $image_notify);
+            $image_notify_url = $upload_dir['baseurl'] . '/pigeon_' . date( 'YmdHis' ) . '.jpg';
+            my_send_linenotify( $token, $content, $image_notify_url, $image_notify_url );
+        } else {
+            my_send_linenotify( $token, $content );
+        }
+    }
+
     return true;
+}
+
+/**
+ * LINE Notify 通知
+ */
+if ( ! function_exists( 'my_send_linenotify' ) ) {
+    function my_send_linenotify( $token, $message, $image_thumbnail = '', $image_fullsize = '' ) {
+        $url = 'https://notify-api.line.me/api/notify';
+        $response = wp_remote_post( $url, array(
+            'method' => 'POST',
+            'headers' => array(
+                'Authorization' => 'Bearer '.$token,
+            ),
+            'body' => array(
+                'message' => $message,
+                'imageThumbnail' => $image_thumbnail,
+                'imageFullsize' => $image_fullsize,
+            ),
+        ));
+        if ( is_wp_error( $response ) ) {
+            $error_message = $response->get_error_message();
+            echo "Error: $error_message";
+            return false;
+        }
+
+        return true;
+    }
 }
