@@ -172,17 +172,15 @@ function pigeon_send_mail( $post_id = '', $base64 = '' ) {
 
     // From
     $from = get_theme_mod( 'pigeon_setting_email_from', '' );
-    if ( !$from ) {
-        $from = get_option( 'admin_email' );
+    if ( $from ) {
+        $headers[] = 'From:' . $from;
     }
-    $headers[] = 'From:' . $from;
 
     // Reply-To
     $reply = get_theme_mod( 'pigeon_setting_email_reply', '' );
-    if ( !$reply ) {
-        $reply = $from;
+    if ( $reply ) {
+        $headers[] = 'Reply-to:' . $reply;
     }
-    $headers[] = 'Reply-to:' . $reply;
 
     // To
     $to = get_theme_mod( 'pigeon_setting_email_to', '' );
